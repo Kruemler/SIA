@@ -1,0 +1,25 @@
+
+Timer 0: System Timer
+
+Timer 1:	
+			PIN11 (PWM)/OC1A Servo 4 
+			PIN12 (PWM)/OC1B Servo 5 
+			PIN13 (PWM)/OC1C Servo 6  
+Timer 2:			
+			PIN10 (PWM)/OC2A H-Bridge 2
+			PIN09 (PWM)/OC2B H-Bridge 1
+
+Timer 3:			
+			PIN05 (PWM)/OC3A Servo 1
+			PIN02 (PWM)/OC3B Servo 2 
+			PIN03 (PWM)/OC3C Servo 3
+
+Timer 4:			
+			PIN06 (PWM)/OC4A Motorregler
+			PIN07 (PWM)/OC4B Motorregler
+
+Timer 5:			
+			PIN44 (PWM)/OC5A Lautsprecher
+			PIN45 (PWM)/OC5B Lautsprecher 
+
+
