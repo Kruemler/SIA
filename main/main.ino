@@ -43,7 +43,7 @@ int8_t m3Speed = 0;
 char transmit_buf[10];
 int8_t tx_adr,tx_cmd; 
 
-int speed = 0;
+int speed = 20;
 
 void spin(int speed) {
    m1Speed = speed * 1; //Multiplikator nach Vorlage anpassen
@@ -118,13 +118,13 @@ void loop() {
               case 16: //speed + 1
                       omni_mode = OMNI_MODE_AUTO;
                       if(speed < 100){
-                        speed = speed + 50;
+                        speed = speed + 10;
                       }
                       break;
              case 17: //speed - 1
                     omni_mode = OMNI_MODE_AUTO;
                     if(speed > -100){
-                      speed = speed -50;
+                      speed = speed - 10;
                     }
                     break;
               case 80: //Taster *
