@@ -43,12 +43,18 @@ int8_t m3Speed = 0;
 char transmit_buf[10];
 int8_t tx_adr,tx_cmd; 
 
-int speed = 50;
+int speed = 0;
 
 void spin(int speed) {
    m1Speed = speed * 1; //Multiplikator nach Vorlage anpassen
    m2Speed = speed * 1;
    m3Speed = speed * 1;
+
+}
+void circle(int speed) {
+  m1Speed = speed * -1.5;
+  m2Speed = speed * 1;
+  m3Speed = speed * -2.75;
 }
     
 void setup() {
@@ -62,7 +68,7 @@ void setup() {
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
   lcd.print("S I A / 20 / 21");
-  delay(5000);            // delay 500 milliseconds
+  delay(1000);            // delay 500 milliseconds
   lcd.clear();
   
   // open the serial port at 9600 bps:
@@ -86,6 +92,7 @@ void loop() {
    rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command); 
    if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle) 
    {
+        /*
         Serial.println("toggle bit maerklin fernsteuerung");         
         tx_adr++;
         tx_cmd = ~tx_adr;
@@ -102,23 +109,23 @@ void loop() {
 
         lcd.setCursor(4, 0);
         lcd.print("A:");
-        lcd.print(maerklin_fst_current.address);
+        lcd.print(maerklin_fst_current.address);*/
 
         if(maerklin_fst_current.address == 24)
         {
             switch(maerklin_fst_current.command)
             {
-              case 16: //forward
+              case 16: //speed + 1
                       omni_mode = OMNI_MODE_AUTO;
-                      m1Speed = -50;
-                      m2Speed = 50;
-                      m3Speed = 0;
+                      if(speed < 100){
+                        speed = speed + 50;
+                      }
                       break;
-             case 17: //backward
+             case 17: //speed - 1
                     omni_mode = OMNI_MODE_AUTO;
-                    m1Speed = 50;
-                    m2Speed = -50;
-                    m3Speed = 0;
+                    if(speed > -100){
+                      speed = speed -50;
+                    }
                     break;
               case 80: //Taster *
                       omni_mode = OMNI_MODE_STOP;
@@ -132,14 +139,15 @@ void loop() {
                       break;
                       
                    
-              case 82: //straight
+              case 82: //spin
                       omni_mode = OMNI_MODE_AUTO;
-                      m1Speed = -50; m2Speed = 50; m3Speed = 0;
+                      //m1Speed = -50; m2Speed = 50; m3Speed = 0;
+                      spin(speed);
                       break;
 
-             case 83: //Taster 3
+             case 83: //circle
                       omni_mode = OMNI_MODE_AUTO;
-                      m1Speed = 50; m2Speed = -50; m3Speed = 0;
+                      circle(speed);
                       break;
                       
               case 84: //Taster 4
