@@ -45,17 +45,30 @@ int8_t tx_adr,tx_cmd;
 
 int speed = 20;
 
-void spin(int speed) {
+void spin(int speed, int delayParm) {
    m1Speed = speed * 1; //Multiplikator nach Vorlage anpassen
    m2Speed = speed * 1;
    m3Speed = speed * 1;
-
+   
+   motor.driverGo(MOTOR_ID_1,m1Speed);
+   motor.driverGo(MOTOR_ID_2,m2Speed);
+   motor.driverGo(MOTOR_ID_3,m3Speed);
+   
+   delay(delayParm);
 }
 void circle(int speed) {
   m1Speed = speed * -1.5;
   m2Speed = speed * 1;
   m3Speed = speed * -2.75;
 }
+
+/*void rectangle(){
+  m1Speed = speed * ;
+  m2Speed = speed * ;
+  m3Speed = speed * ;
+  delay();
+  spin();
+}*/
     
 void setup() {
   /* put your setup code here, to run once */
@@ -92,7 +105,7 @@ void loop() {
    rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command); 
    if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle) 
    {
-        /*
+        
         Serial.println("toggle bit maerklin fernsteuerung");         
         tx_adr++;
         tx_cmd = ~tx_adr;
@@ -109,8 +122,71 @@ void loop() {
 
         lcd.setCursor(4, 0);
         lcd.print("A:");
-        lcd.print(maerklin_fst_current.address);*/
+        lcd.print(maerklin_fst_current.address);
 
+        
+        if(maerklin_fst_current.address == 27)  //Demofiguren channel (=3)
+        {  
+          switch(maerklin_fst_current.command)
+          {
+            case 81:  //Knopf 1
+              //circle();
+              break;
+            case 82:  //Knopf 2
+              //spin();
+              break;
+            case 83:  //Knopf 3
+              //rectangle();
+              m1Speed = 50;
+              m2Speed = -50;
+              m3Speed = 0;
+              motor.driverGo(MOTOR_ID_1,m1Speed);
+              motor.driverGo(MOTOR_ID_2,m2Speed);
+              motor.driverGo(MOTOR_ID_3,m3Speed);
+              
+              delay(2000);
+              m1Speed = -38;
+              m2Speed = -38;
+              m3Speed = 59;
+              motor.driverGo(MOTOR_ID_1,m1Speed);
+              motor.driverGo(MOTOR_ID_2,m2Speed);
+              motor.driverGo(MOTOR_ID_3,m3Speed);
+              
+              delay(2000);
+              m1Speed = -50;
+              m2Speed = 50;
+              m3Speed = 0;
+              motor.driverGo(MOTOR_ID_1,m1Speed);
+              motor.driverGo(MOTOR_ID_2,m2Speed);
+              motor.driverGo(MOTOR_ID_3,m3Speed);
+              
+              delay(2000);
+              m1Speed = 38;
+              m2Speed = 38;
+              m3Speed = -59;
+              motor.driverGo(MOTOR_ID_1,m1Speed);
+              motor.driverGo(MOTOR_ID_2,m2Speed);
+              motor.driverGo(MOTOR_ID_3,m3Speed);
+              
+              delay(2000);
+              m1Speed = 0;
+              m2Speed = 0;
+              m3Speed = 0;
+              break;
+              
+            case 84:  //Knopf 4
+              break;
+
+            case 16:  // Knopf +
+              break;
+            case 17:  //Knopf -
+              break;
+
+            case 13:  //letzter Knopf
+              break;
+          }
+        }
+        
         if(maerklin_fst_current.address == 24)
         {
             switch(maerklin_fst_current.command)
@@ -142,7 +218,7 @@ void loop() {
               case 82: //spin
                       omni_mode = OMNI_MODE_AUTO;
                       //m1Speed = -50; m2Speed = 50; m3Speed = 0;
-                      spin(speed);
+                      //spin(speed);
                       break;
 
              case 83: //circle
