@@ -44,6 +44,7 @@ char transmit_buf[10];
 int8_t tx_adr,tx_cmd; 
 
 int speed = 20;
+int eq = 1.25;
 
 void spin(int speed, int delayParm) {
    m1Speed = speed * 1; //Multiplikator nach Vorlage anpassen
@@ -129,6 +130,9 @@ void loop() {
         {  
           switch(maerklin_fst_current.command)
           {
+            case 80: //Knopf*
+              omni_mode = OMNI_MODE_STOP;
+              break;
             case 81:  //Knopf 1
               //circle();
               break;
@@ -178,7 +182,11 @@ void loop() {
               break;
 
             case 16:  // Knopf +
+              m1Speed = -50;
+              m2Speed = 50 * eq;
+              m3Speed = 0;
               break;
+              
             case 17:  //Knopf -
               break;
 
@@ -203,11 +211,7 @@ void loop() {
                       speed = speed - 10;
                     }
                     break;
-              case 80: //Taster *
-                      omni_mode = OMNI_MODE_STOP;
-                      m1Speed = m2Speed = m3Speed = 0;
-                      motor.driverStop(MOTOR_ALL);
-                      break;
+              motor.driverGo(MOTOR_ID_2,m2Speed);
                    
               case 81: //Left Taster 1
                       omni_mode = OMNI_MODE_AUTO;
@@ -246,9 +250,10 @@ void loop() {
    }
 
   #if 0
-      motor.driverGo(MOTOR_ID_1,m1Speed);
       motor.driverGo(MOTOR_ID_2,m2Speed);
       motor.driverGo(MOTOR_ID_3,m3Speed);
+      delay(50);
+      motor.driverGo(MOTOR_ID_1,m1Speed);
   #else
       motor.driverGo(MOTOR_ID_1+MOTOR_ID_2+MOTOR_ID_3,m1Speed,m2Speed,m3Speed,0);
       //motor.driverGo(MOTOR_ALL,m1Speed,m2Speed,m3Speed,0);
