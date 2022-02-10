@@ -1,6 +1,5 @@
 #include <analogOut.h>
 #include <define.h>
-#include <motor.h>
 #include <motor_drv.h>
 #include <radio_receiver.h>
 #include <rc5_decoder.h>
@@ -17,6 +16,7 @@ int m2Speed = 0;
 int m3Speed = 0;
 
 int demoSpeed = 1;
+int delayParam = 30000;
 
 //Maerklin init (verstehen...)
 struct STRUCT_RC5 {
@@ -34,55 +34,55 @@ void go(int m1Speed, int m2Speed, int m3Speed){
 
 
 //Demofiguren init
-void spin(int delayParm){
+void spin(int demoSpeed, int delayParam){
   m1Speed = demoSpeed * 1;
   m2Speed = demoSpeed * 1;
   m3Speed = demoSpeed * 1;
-  go(m1Speed, m2speed, m3Speed);
-  delay(delayParm);
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
   go(0,0,0);
 }
 
-void cirle(int delayParm){
+void circle(int demoSpeed, int delayParam){
   m1Speed = demoSpeed * -1.5;
-  m2Speed = demoSpeed * 1:
+  m2Speed = demoSpeed * 1;
   m3Speed = demoSpeed * -2.75;
   go(m1Speed, m2Speed, m3Speed);
-  delay(delayParm);
+  delay(delayParam);
   go(0,0,0);
 }
 
-void rectangel(int delayParm){
+void rectangle(int demoSpeed, int delayParam){
   m1Speed = 50;
   m2Speed = -50;
   m3Speed = 0;
   go(m1Speed, m2Speed, m3Speed);
-  delay(delayParm);
+  delay(delayParam);
   
   m1Speed = -38;
   m2Speed = -38;
   m3Speed = 59;
-  go(m1Speed, m2Speed, m3Speed): 
-  delay(delayParm);
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
   
   m1Speed = -50;
   m2Speed = 50;
   m3Speed = 0;
   go(m1Speed, m2Speed, m3Speed);
-  delay(delayParm);
+  delay(delayParam);
   
   m1Speed = 38;
   m2Speed = 38;
   m3Speed = -59;
   go(m1Speed, m2Speed, m3Speed);
-  delay(delayParm);
+  delay(delayParam);
   
   go(0,0,0);
 }
 
 void setup(){
   rc5_init(); //init Maerklin Remote Control
-  graupner_fst_init(); //init Graupner Remote Control
+  //graupner_fst_init(); //init Graupner Remote Control
 }
 
 void loop(){
@@ -93,23 +93,23 @@ void loop(){
     switch(maerklin_fst_current.command)
     {
       case 81://Top left (1)
-        spin(demoSpeed, delayParm);
+        spin(demoSpeed, delayParam);
         break;
       case 82://Top middle left (2)
-        circle(demoSpeed, delayParm);
+        circle(demoSpeed, delayParam);
         break;
       case 83://Top middle right (3)
-        rectangle(demoSpeed, delayParm);
+        rectangle(demoSpeed, delayParam);
       case 84://Top right (4)
         break;
       case 16://+ -Button
         if(demoSpeed < 10000){
-          delayParm = delayParm + 500;
+          delayParam = delayParam + 500;
         }
         break;
       case 17://- -Button
         if(demoSpeed > 0){
-          delayParm = delayParm - 500;
+          delayParam = delayParam - 500;
         }
         break;
       case 13: //bottom
