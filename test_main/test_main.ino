@@ -1,4 +1,4 @@
-#include <AnalogOut.h>
+#include <analogOut.h>
 #include <define.h>
 #include <motor.h>
 #include <motor_drv.h>
@@ -10,7 +10,7 @@
 #include <LiquidCrystal.h>
 #include <Wire.h>
 
-motor meinMotor;
+Motor motor;
 
 int m1Speed = 0;
 int m2Speed = 0;
@@ -27,9 +27,9 @@ uint8_t       toggle,
 
 //MotorDriverGo Function
 void go(int m1Speed, int m2Speed, int m3Speed){
-  meinMotor.driverGo(MOTOR_ID_1, m1Speed);
-  meinMotor.driverGo(MOTOR_ID_2, m2Speed);
-  meinMotor.driverGo(MOTOR_ID_3, m3Speed);
+  motor.driverGo(MOTOR_ID_1, m1Speed);
+  motor.driverGo(MOTOR_ID_2, m2Speed);
+  motor.driverGo(MOTOR_ID_3, m3Speed);
 }
 
 
