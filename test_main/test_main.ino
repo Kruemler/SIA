@@ -94,20 +94,81 @@ void setup(){
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
   
-
-  if(maerklin_fst_current.address == 27)
+  if(maerklin_fst_current.address == 25) // Position 1
   {
     switch(maerklin_fst_current.command)
     {
-      case 81://Top left (1)
+      case 80: //Button *
+
+        break;
+      case 81: //Button 1
+
+        break;
+      case 82: //Button 2
+
+        break;
+      case 83: //Button 3
+
+        break;
+      case 84: //Button 4
+
+        break;
+      case 16: //Button +
+
+        break;
+      case 17: //Button -
+
+        break;
+      case 13: //Button <.>
+        break;
+    }
+  }
+  
+  if(maerklin_fst_current.address == 26) // Position 2
+  {
+    switch(maerklin_fst_current.command)
+    {
+      case 80: //Button *
+
+        break;
+      case 81: //Button 1
+
+        break;
+      case 82: //Button 2
+
+        break;
+      case 83: //Button 3
+
+        break;
+      case 84: //Button 4
+
+        break;
+      case 16: //Button +
+
+        break;
+      case 17: //Button -
+
+        break;
+      case 13: //Button <.>
+        break;
+    }
+  }
+
+  if(maerklin_fst_current.address == 27) // Position 3
+  {
+    switch(maerklin_fst_current.command)
+    {
+      case 80: //Button *
+        break;
+      case 81: //Button 1
         spin(demoSpeed, delayParam);
         break;
-      case 82://Top middle left (2)
+      case 82: //Button 2
         circle(demoSpeed, delayParam);
         break;
-      case 83://Top middle right (3)
+      case 83: //Button 3
         rectangle(demoSpeed, delayParam);
-      case 84://Top right (4)
+      case 84: //Button 4
         break;
       case 16: //Button +
         if(demoSpeed < 10000){
@@ -118,6 +179,36 @@ void loop(){
         if(demoSpeed > 0){
           delayParam = delayParam - 500;
         }
+        break;
+      case 13: //Button <.>
+        break;
+    }
+  }
+
+  if(maerklin_fst_current.address == 28) // Position 4
+  {
+    switch(maerklin_fst_current.command)
+    {
+      case 80: //Button *
+
+        break;
+      case 81: //Button 1
+
+        break;
+      case 82: //Button 2
+
+        break;
+      case 83: //Button 3
+
+        break;
+      case 84: //Button 4
+
+        break;
+      case 16: //Button +
+
+        break;
+      case 17: //Button -
+
         break;
       case 13: //Button <.>
         break;
