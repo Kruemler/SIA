@@ -9,12 +9,17 @@
 //#include <LiquidCrystal.h>
 //#include <Wire.h>
 
+#define RC_MOTOR_1  1    
+#define RC_MOTOR_2  2
+#define RC_MOTOR_3  3
+
 Motor motor;
 
 int m1Speed = 0;
 int m2Speed = 0;
 int m3Speed = 0;
 
+int delayParm = 1000;
 int demoSpeed = 1;
 int delayParam = 30000;
 
@@ -52,6 +57,7 @@ void circle(int demoSpeed, int delayParam){
   delay(delayParam);
   go(0,0,0);
 }
+
 
 void rectangle(int demoSpeed, int delayParam){
   m1Speed = 50;
@@ -91,32 +97,114 @@ void loop(){
   
   switch(maerklin_fst_current.address)  //Switch Case though the adresses (1/2/3/4) = () 
   {
+    case 25:  //Channel 1
+      switch(maerklin_fst_current.command){
+      case 80: //Button *
+
+        break;
+      case 81: //Button 1
+
+        break;
+      case 82: //Button 2
+
+        break;
+      case 83: //Button 3
+
+        break;
+      case 84: //Button 4
+
+        break;
+      case 16: //Button +
+
+        break;
+      case 17: //Button -
+
+        break;
+      case 13: //Button <.>
+        break;
+      }
+    
+    case 26:  //Channel 2
+      switch(maerklin_fst_current.command){
+        case 80: //Button *
+
+          break;
+        case 81: //Button 1
+
+          break;
+        case 82: //Button 2
+
+          break;
+        case 83: //Button 3
+
+          break;
+        case 84: //Button 4
+
+          break;
+        case 16: //Button +
+        
+          break;
+        case 17: //Button -
+
+          break;
+        case 13: //Button <.>
+          break;
+        }
+    
     case 27:  //Channel 3 Demofiguren
       switch(maerklin_fst_current.command)
       {
-        case 81://Top left (1)
+        case 81:  //Button 1
           spin(demoSpeed, delayParam);
-          break;
-        case 82://Top middle left (2)
+          
+        case 82:  //Button 2
           circle(demoSpeed, delayParam);
-          break;
-        case 83://Top middle right (3)
+
+        case 83:  //Button 3
           rectangle(demoSpeed, delayParam);
-        case 84://Top right (4)
+
+        case 84:  //Button 4
           break;
-        case 16://+ -Button
+        case 16:  //+ -Button
           if(demoSpeed < 10000){
             delayParam = delayParam + 500;
           }
           break;
-        case 17://- -Button
+        case 17:  //- -Button
           if(demoSpeed > 0){
             delayParam = delayParam - 500;
           }
           break;
-        case 13: //bottom
+        case 13: //Button <.>
           break;
       }
+    case 28:  //Channel 4
+      switch(maerklin_fst_current.command){
+        case 80: //Button *
+
+          break;
+        case 81: //Button 1
+
+          break;
+        case 82: //Button 2
+
+          break;
+        case 83: //Button 3
+
+          break;
+        case 84: //Button 4
+
+          break;
+        case 16: //Button +
+        
+          break;
+        case 17: //Button -
+
+          break;
+        case 13: //Button <.>
+          break;
+        }
+    
   }
 }
   
