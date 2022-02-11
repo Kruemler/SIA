@@ -1,13 +1,13 @@
-#include <analogOut.h>
-#include <define.h>
+//#include <analogOut.h>
+//#include <define.h>
 #include <motor_drv.h>
-#include <radio_receiver.h>
+//#include <radio_receiver.h>
 #include <rc5_decoder.h>
-#include <Servo.h>
-#include <ServoTimers.h>
-#include <sia_board_io.h>
-#include <LiquidCrystal.h>
-#include <Wire.h>
+//#include <Servo.h>
+//#include <ServoTimers.h>
+//#include <sia_board_io.h>
+//#include <LiquidCrystal.h>
+//#include <Wire.h>
 
 Motor motor;
 
@@ -18,12 +18,13 @@ int m3Speed = 0;
 int demoSpeed = 1;
 int delayParam = 30000;
 
-//Maerklin init (verstehen...)
+
 struct STRUCT_RC5 {
 uint8_t       toggle, 
               address, 
               command;
 }maerklin_fst_current, maerklin_fst_previous;
+
 
 //MotorDriverGo Function
 void go(int m1Speed, int m2Speed, int m3Speed){
@@ -88,33 +89,34 @@ void setup(){
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
   
-  if(maerklin_fst_current.address == 27)
+  switch(maerklin_fst_current.address)  //Switch Case though the adresses (1/2/3/4) = () 
   {
-    switch(maerklin_fst_current.command)
-    {
-      case 81://Top left (1)
-        spin(demoSpeed, delayParam);
-        break;
-      case 82://Top middle left (2)
-        circle(demoSpeed, delayParam);
-        break;
-      case 83://Top middle right (3)
-        rectangle(demoSpeed, delayParam);
-      case 84://Top right (4)
-        break;
-      case 16://+ -Button
-        if(demoSpeed < 10000){
-          delayParam = delayParam + 500;
-        }
-        break;
-      case 17://- -Button
-        if(demoSpeed > 0){
-          delayParam = delayParam - 500;
-        }
-        break;
-      case 13: //bottom
-        break;
-    }
-  } 
+    case 27:  //Channel 3 Demofiguren
+      switch(maerklin_fst_current.command)
+      {
+        case 81://Top left (1)
+          spin(demoSpeed, delayParam);
+          break;
+        case 82://Top middle left (2)
+          circle(demoSpeed, delayParam);
+          break;
+        case 83://Top middle right (3)
+          rectangle(demoSpeed, delayParam);
+        case 84://Top right (4)
+          break;
+        case 16://+ -Button
+          if(demoSpeed < 10000){
+            delayParam = delayParam + 500;
+          }
+          break;
+        case 17://- -Button
+          if(demoSpeed > 0){
+            delayParam = delayParam - 500;
+          }
+          break;
+        case 13: //bottom
+          break;
+      }
+  }
 }
   
