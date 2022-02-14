@@ -114,7 +114,7 @@ void loop(){
   
     switch(maerklin_fst_current.address)  //Switch Case though the adresses (1/2/3/4) = () 
     {
-      case 24:  //Channel 1
+      case 24:  //Channel 1 //reserved Warnbrarke --> needs to be changed
         switch(maerklin_fst_current.command){
           case 16:
             lcd.clear();
