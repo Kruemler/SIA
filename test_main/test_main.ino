@@ -107,36 +107,51 @@ void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
 
   if(mode == true) {
-    lcd.clear();
     lcd.setCursor(0, 1);
     lcd.print(graupner_fst.channel(RC_MOTOR_1));
+    lcd.setCursor(5, 1);
+    lcd.print(graupner_fst.channel(RC_MOTOR_2));
+    lcd.setCursor(10, 1);
+    lcd.print(graupner_fst.channel(RC_MOTOR_3));
+    lcd.setCursor(0, 1);
+    lcd.print("                ");
   }
 
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
     switch(maerklin_fst_current.address) {  //Switches between adresses (1/2/3/4)
       case 24:  //Adress 1
         lcd.setCursor(0, 0);
-        lcd.print("Channel 1");
-        lcd.setCursor(0, 1);
+        lcd.print("A:1");
         switch(maerklin_fst_current.command){
-          case 13:
-            mode = !mode;
-            if(mode==true) {
-              lcd.print("                ");
-              lcd.setCursor(0, 1);
-              lcd.print("Mode: AUTO");
-            }
-            else {
-              lcd.print("                ");
-              lcd.setCursor(0, 1);
-              lcd.print("Mode: MANUAL");
-            }
+          case 80: //Button *
+  
+            break;
+          case 81: //Button 1
+  
+            break;
+          case 82: //Button 2
+  
+            break;
+          case 83: //Button 3
+  
+            break;
+          case 84: //Button 4
+  
+            break;
+          case 16: //Button +
+          
+            break;
+          case 17: //Button -
+  
+            break;
+          case 13: //Button <.>
+          
+            break;
         }
         
       case 26:  //Adress 2
         lcd.setCursor(0, 0);
-        lcd.print("Channel 2");
-        lcd.setCursor(0, 1);
+        lcd.print("A:2");
         switch(maerklin_fst_current.command){
           case 80: //Button *
   
@@ -165,8 +180,7 @@ void loop(){
       
       case 27:  //Adress 3 Demofigures
         lcd.setCursor(0, 0);
-        lcd.print("Channel 3");
-        lcd.setCursor(0, 1);
+        lcd.print("A:3");
         switch(maerklin_fst_current.command)
         {
           case 80:  //Button *
@@ -197,8 +211,7 @@ void loop(){
         }
       case 28:  //Adress 4
         lcd.setCursor(0, 0);
-        lcd.print("Channel 4");
-        lcd.setCursor(0, 1);
+        lcd.print("A:4");
         switch(maerklin_fst_current.command){
           case 80: //Button *
   
@@ -222,6 +235,19 @@ void loop(){
   
             break;
           case 13: //Button <.>
+            lcd.setCursor(6, 0);
+            lcd.print("C:13");
+            mode = !mode;
+            if(mode==true) {
+              lcd.print("                ");
+              lcd.setCursor(13, 0);
+              lcd.print("M:A");
+            }
+            else {
+              lcd.print("                ");
+              lcd.setCursor(13, 0);
+              lcd.print("M:M");
+            }
             break;
           }
       
