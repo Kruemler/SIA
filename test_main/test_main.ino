@@ -112,9 +112,6 @@ void loop(){
     lcd.print(graupner_fst.channel(RC_MOTOR_1));
   }
 
-
-  
-
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
     switch(maerklin_fst_current.address) {  //Switches between adresses (1/2/3/4)
       case 24:  //Adress 1
