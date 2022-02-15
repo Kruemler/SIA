@@ -9,12 +9,6 @@
 #include <LiquidCrystal.h>
 #include <Wire.h>
 
-//<LED>
-#include "Adafruit_LEDBackpack.h"
-#include "Adafruit_GFX.h"
-
-Adafruit_8x8matrix matrix = Adafruit_8x8matrix();
-//</LED>
 
 #define RC_MOTOR_1  1    
 #define RC_MOTOR_2  2
