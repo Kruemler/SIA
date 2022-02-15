@@ -10,9 +10,9 @@
 #include <Wire.h>
 
 
-#define RC_MOTOR_1  1    
-#define RC_MOTOR_2  2
-#define RC_MOTOR_3  3
+#define RC_MOTOR_1  3
+#define RC_MOTOR_2  1
+#define RC_MOTOR_3  2
 
 Motor motor;  //create motor object
 
@@ -27,7 +27,7 @@ int m3Speed = 0;
 
 int demoSpeed = 20;
 int delayParam = 3000;
-String remote = "autom";
+bool mode = false;
 
 
 struct STRUCT_RC5 {
@@ -90,45 +90,56 @@ void rectangle(int demoSpeed, int delayParam){
 }
 
 void setup(){
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("SIA 21/22 4Teck");
+  delay(3000);
   rc5_init(); //init Maerklin rmote control
   graupner_fst.init(); // init. Graupner remote control
   //graupner_fst_init(); //init Graupner Remote Control
-  lcd.print("upload complete");
-  delay(5000);
+  lcd.clear();
+  lcd.print("Done Uploading");
+  delay(3000);
   lcd.clear();
 }
 
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
 
-        m1Speed = graupner_fst.channel(RC_MOTOR_1);
-        m2Speed = graupner_fst.channel(RC_MOTOR_2);
-        m3Speed = graupner_fst.channel(RC_MOTOR_3);
-        lcd.setCursor(0,0);
-        lcd.print("Graupner Remote");
-        lcd.setCursor(0,1);
-        lcd.print(graupner_fst.channel(RC_MOTOR_1));
+  if(mode == true) {
+    lcd.clear();
+    lcd.setCursor(0, 1);
+    lcd.print(graupner_fst.channel(RC_MOTOR_1));
+  }
 
+
+  
 
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
-  
-    switch(maerklin_fst_current.address)  //Switch Case though the adresses (1/2/3/4) = () 
-    {
-      case 24:  //Channel 1
+    switch(maerklin_fst_current.address) {  //Switches between adresses (1/2/3/4)
+      case 24:  //Adress 1
+        lcd.setCursor(0, 0);
+        lcd.print("Channel 1");
+        lcd.setCursor(0, 1);
         switch(maerklin_fst_current.command){
-          case 16:
-            lcd.clear();
-            bool test = true;
-            test = !test;
-            lcd.print(test);
-          case 81:
-            lcd.clear();
-            remote = "manuell";
-            lcd.print(remote);
+          case 13:
+            mode = !mode;
+            if(mode==true) {
+              lcd.print("                ");
+              lcd.setCursor(0, 1);
+              lcd.print("Mode: AUTO");
+            }
+            else {
+              lcd.print("                ");
+              lcd.setCursor(0, 1);
+              lcd.print("Mode: MANUAL");
+            }
         }
         
-      case 26:  //Channel 2
-        lcd.clear();
+      case 26:  //Adress 2
+        lcd.setCursor(0, 0);
+        lcd.print("Channel 2");
+        lcd.setCursor(0, 1);
         switch(maerklin_fst_current.command){
           case 80: //Button *
   
@@ -155,7 +166,10 @@ void loop(){
             break;
           }
       
-      case 27:  //Channel 3 Demofiguren
+      case 27:  //Adress 3 Demofigures
+        lcd.setCursor(0, 0);
+        lcd.print("Channel 3");
+        lcd.setCursor(0, 1);
         switch(maerklin_fst_current.command)
         {
           case 80:  //Button *
@@ -184,7 +198,10 @@ void loop(){
           case 13: //Button <.>
             break;
         }
-      case 28:  //Channel 4
+      case 28:  //Adress 4
+        lcd.setCursor(0, 0);
+        lcd.print("Channel 4");
+        lcd.setCursor(0, 1);
         switch(maerklin_fst_current.command){
           case 80: //Button *
   
