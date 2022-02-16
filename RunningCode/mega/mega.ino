@@ -14,12 +14,8 @@
 #define RC_MOTOR_2  1
 #define RC_MOTOR_3  2
 
-const unsigned long eventInterval = 1000;
-unsigned long previousTime = 0;
 
 Motor motor;  //create motor object
-
-radio_receiver graupner_fst;  // create graupner_remote_control object
 
 const int rs = 31, en = 30, d4 = 29, d5 = 28, d6 = 27, d7 = 26;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
@@ -30,7 +26,7 @@ int m3Speed = 0;
 
 int demoSpeed = 40;
 int delayParam = 3000;
-int dir = 1;
+//int dir = 1;
 bool mode = false;
 
 
@@ -94,42 +90,12 @@ void rectangle(int demoSpeed, int delayParam){
   delay(delayParam);
 }
 
-
-void triangle(int demoSpeed, int delayParam) {
-  
-}
-
-
-void forward(int demoSpeed, int delayParam) {
-  
-}
-
-
-void backward(int demoSpeed, int delayParam) {
-  
-}
-
-//Manual Function
-void manual(int thing3) {
-    lcd.setCursor(0, 1);
-    lcd.print("                ");
-    lcd.print("Y-Axis");
-    lcd.print(" ");
-    lcd.print(thing3);
-    m1Speed = thing3;
-    m2Speed = thing3;
-    m3Speed = 0;
-    go(m1Speed, m2Speed, m3Speed);
-}
-
 void setup(){
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
   lcd.print("SIA 21/22 4Teck");
   delay(3000);
   rc5_init(); //init Maerklin remote control
-  graupner_fst.init(); // init. Graupner remote control
-  //graupner_fst_init(); //init Graupner Remote Control
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("A:    C:     M:");
@@ -138,16 +104,6 @@ void setup(){
 
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
-
-  unsigned long currentTime = millis();
-  
-  if(mode == true) {
-    if (currentTime - previousTime >= eventInterval){
-      manual(graupner_fst.channel(RC_MOTOR_3));
-
-      previousTime = currentTime;
-    }
-  }
 
   
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
@@ -247,48 +203,6 @@ void loop(){
             break;
         }
       case 28:  //Adress 4 Drive
-        lcd.setCursor(0, 0);
-        lcd.print("A:4");
-        switch(maerklin_fst_current.command){
-          case 80: //Button *
-  
-            break;
-          case 81: //Button 1
-  
-            break;
-          case 82: //Button 2
-  
-            break;
-          case 83: //Button 3
-  
-            break;
-          case 84: //Button 4
-  
-            break;
-          case 16: //Button +
-          
-            break;
-          case 17: //Button -
-  
-            break;
-          case 13: //Button <.>
-            lcd.setCursor(6, 0);
-            lcd.print("C:13");
-            mode = !mode;
-            if(mode==true) {
-              lcd.print("                ");
-              lcd.setCursor(13, 0);
-              lcd.print("M:M");
-              lcd.setCursor(0, 1);
-            }
-            else {
-              lcd.print("                ");
-              lcd.setCursor(13, 0);
-              lcd.print("M:A");
-            }
-            break;
-          }
-      
     }
   }
   maerklin_fst_previous = maerklin_fst_current;
