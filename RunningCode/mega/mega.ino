@@ -14,6 +14,8 @@
 #define RC_MOTOR_2  1
 #define RC_MOTOR_3  2
 
+const unsigned long eventInterval = 1000;
+unsigned long previousTime = 0;
 
 Motor motor;  //create motor object
 
@@ -26,8 +28,9 @@ int m1Speed = 0;
 int m2Speed = 0;
 int m3Speed = 0;
 
-int demoSpeed = 20;
+int demoSpeed = 40;
 int delayParam = 3000;
+int dir = 1;
 bool mode = false;
 
 
@@ -46,21 +49,22 @@ void go(int m1Speed, int m2Speed, int m3Speed){
 }
 
 
-//Demofiguren init
-void spin(int demoSpeed, int delayParam){
-  m1Speed = demoSpeed * 1;
-  m2Speed = demoSpeed * 1;
-  m3Speed = demoSpeed * 1;
-  go(50, 50, 50);
-  delay(delayParam);
+//Demofigure Functions
+void spin(int demoSpeed, int dir){
+  m1Speed = demoSpeed * dir;
+  m2Speed = demoSpeed * dir;
+  m3Speed = demoSpeed * dir;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(1100);
 }
 
-void circle(int demoSpeed, int delayParam){
-  m1Speed = demoSpeed * -1.5;
-  m2Speed = demoSpeed * 1;
-  m3Speed = demoSpeed * -2.75;
+
+void circle(int demoSpeed, int dir){
+  m1Speed = demoSpeed * -1.5 * dir;
+  m2Speed = demoSpeed * dir;
+  m3Speed = demoSpeed * -2.75 * dir;
   go(m1Speed, m2Speed, m3Speed);
-  delay(delayParam);
+  delay(3000);
 }
 
 
@@ -91,13 +95,29 @@ void rectangle(int demoSpeed, int delayParam){
 }
 
 
+void triangle(int demoSpeed, int delayParam) {
+  
+}
+
+
+void forward(int demoSpeed, int delayParam) {
+  
+}
+
+
+void backward(int demoSpeed, int delayParam) {
+  
+}
+
+//Manual Function
 void manual(int thing3) {
     lcd.setCursor(0, 1);
+    lcd.print("                ");
     lcd.print("Y-Axis");
     lcd.print(" ");
     lcd.print(thing3);
-    m1Speed = 50;
-    m2Speed = 50;
+    m1Speed = thing3;
+    m2Speed = thing3;
     m3Speed = 0;
     go(m1Speed, m2Speed, m3Speed);
 }
@@ -113,13 +133,20 @@ void setup(){
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("A:    C:     M:");
+  Serial.begin(9600);
 }
 
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
 
+  unsigned long currentTime = millis();
+  
   if(mode == true) {
-    manual(graupner_fst.channel(RC_MOTOR_3));
+    if (currentTime - previousTime >= eventInterval){
+      manual(graupner_fst.channel(RC_MOTOR_3));
+
+      previousTime = currentTime;
+    }
   }
 
   
@@ -189,33 +216,37 @@ void loop(){
         lcd.print("A:3");
         switch(maerklin_fst_current.command)
         {
-          case 80:  //Button *
-            go(0,0,0);
-          case 81:  //Button 1
-            spin(demoSpeed, delayParam);
+          case 80:  //Button * (Stop)
+            go(0, 0, 0);
             break;
-          case 82:  //Button 2
+          case 81:  //Button 1 (Spin)
+            spin(demoSpeed, dir);
+            break;-
+          case 82:  //Button 2 (Circle)
             circle(demoSpeed, delayParam);
             break;
-          case 83:  //Button 3
+          case 83:  //Button 3 (Rectangle)
             rectangle(demoSpeed, delayParam);
             break;
-          case 84:  //Button 4
+          case 84:  //Button 4 (Triangle)
+            triangle(demoSpeed, delayParam);
             break;
-          case 16:  //+ -Button
-            if(demoSpeed < 10000){
-              delayParam = delayParam + 500;
+          case 16:  //Button + (Forward)
+            forward(demoSpeed, delayParam);
+            break;
+          case 17:  //Button - (Backward)
+            backward(demoSpeed, delayParam);
+            break;
+          case 13: //Button <.> (R/L Toggle)
+            if(dir = 1) {
+              dir = -1;
             }
-            break;
-          case 17:  //- -Button
-            if(demoSpeed > 0){
-              delayParam = delayParam - 500;
+            else {
+              dir = 1;
             }
-            break;
-          case 13: //Button <.>
             break;
         }
-      case 28:  //Adress 4
+      case 28:  //Adress 4 Drive
         lcd.setCursor(0, 0);
         lcd.print("A:4");
         switch(maerklin_fst_current.command){
