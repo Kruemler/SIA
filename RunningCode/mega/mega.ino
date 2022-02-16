@@ -10,9 +10,10 @@
 #include <Wire.h>
 
 
-#define RC_CHANNEL_1  3
-#define RC_CHANNEL_2  1
-#define RC_CHANNEL_3  2
+#define RC_MOTOR_1  3
+#define RC_MOTOR_2  1
+#define RC_MOTOR_3  2
+
 
 Motor motor;  //create motor object
 
@@ -89,16 +90,16 @@ void rectangle(int demoSpeed, int delayParam){
   delay(delayParam);
 }
 
-void manual(int RC_CHANNEL_1, int RC_CHANNEL_2, int RC_CHANNEL_3) {
 
-  if(RC_MOTOR_3 != 0) {
+void manual(int thing3) {
     lcd.setCursor(0, 1);
     lcd.print("Y-Axis");
-    m1Speed = -1 * graupner_fst.channel(RC_CHANNEL_3);
-    m2Speed = graupner_fst.channel(RC_CHANNEL_3);
+    lcd.print(" ");
+    lcd.print(thing3);
+    m1Speed = 50;
+    m2Speed = 50;
     m3Speed = 0;
     go(m1Speed, m2Speed, m3Speed);
-  }
 }
 
 void setup(){
@@ -117,6 +118,11 @@ void setup(){
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
 
+  if(mode == true) {
+    manual(graupner_fst.channel(RC_MOTOR_3));
+  }
+
+  
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
     switch(maerklin_fst_current.address) {  //Switches between adresses (1/2/3/4)
       case 24:  //Adress 1
@@ -242,7 +248,7 @@ void loop(){
               lcd.print("                ");
               lcd.setCursor(13, 0);
               lcd.print("M:M");
-              manual(RC_CHANNEL_1, RC_CHANNEL_2, RC_CHANNEL_3);
+              lcd.setCursor(0, 1);
             }
             else {
               lcd.print("                ");
