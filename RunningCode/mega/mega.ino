@@ -10,9 +10,9 @@
 #include <Wire.h>
 
 
-#define RC_MOTOR_1  3
-#define RC_MOTOR_2  1
-#define RC_MOTOR_3  2
+#define RC_CHANNEL_1  3
+#define RC_CHANNEL_2  1
+#define RC_CHANNEL_3  2
 
 Motor motor;  //create motor object
 
@@ -89,33 +89,33 @@ void rectangle(int demoSpeed, int delayParam){
   delay(delayParam);
 }
 
+void manual(int RC_CHANNEL_1, int RC_CHANNEL_2, int RC_CHANNEL_3) {
+
+  if(RC_MOTOR_3 != 0) {
+    lcd.setCursor(0, 1);
+    lcd.print("Y-Axis");
+    m1Speed = -1 * graupner_fst.channel(RC_CHANNEL_3);
+    m2Speed = graupner_fst.channel(RC_CHANNEL_3);
+    m3Speed = 0;
+    go(m1Speed, m2Speed, m3Speed);
+  }
+}
+
 void setup(){
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
   lcd.print("SIA 21/22 4Teck");
   delay(3000);
-  rc5_init(); //init Maerklin rmote control
+  rc5_init(); //init Maerklin remote control
   graupner_fst.init(); // init. Graupner remote control
   //graupner_fst_init(); //init Graupner Remote Control
   lcd.clear();
-  lcd.print("Done Uploading");
-  delay(3000);
-  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("A:    C:     M:");
 }
 
 void loop(){
   rc5_read(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
-
-  if(mode == true) {
-    lcd.setCursor(0, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_1));
-    lcd.setCursor(5, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_2));
-    lcd.setCursor(10, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_3));
-    lcd.setCursor(0, 1);
-    lcd.print("                ");
-  }
 
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
     switch(maerklin_fst_current.address) {  //Switches between adresses (1/2/3/4)
@@ -241,12 +241,13 @@ void loop(){
             if(mode==true) {
               lcd.print("                ");
               lcd.setCursor(13, 0);
-              lcd.print("M:A");
+              lcd.print("M:M");
+              manual(RC_CHANNEL_1, RC_CHANNEL_2, RC_CHANNEL_3);
             }
             else {
               lcd.print("                ");
               lcd.setCursor(13, 0);
-              lcd.print("M:M");
+              lcd.print("M:A");
             }
             break;
           }
