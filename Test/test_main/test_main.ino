@@ -28,7 +28,7 @@ int m1Speed = 0;
 int m2Speed = 0;
 int m3Speed = 0;
 
-int demoSpeed = 40;
+int demoSpeed = 50; // Must be below or equal to 50 HIER BLEIBT ALLES SO WIE ES IST
 int delayParam = 3000;
 int dir = 1;
 bool mode = false;
@@ -55,14 +55,14 @@ void spin(int demoSpeed, int dir){
   m2Speed = demoSpeed * dir;
   m3Speed = demoSpeed * dir;
   go(m1Speed, m2Speed, m3Speed);
-  delay(1100);
+  delay(2650);
 }
 
 
 void circle(int demoSpeed, int dir){
-  m1Speed = demoSpeed * -1.5 * dir;
+  m1Speed = demoSpeed * -0.75 * dir;
   m2Speed = demoSpeed * dir;
-  m3Speed = demoSpeed * -2.75 * dir;
+  m3Speed = demoSpeed * -1.375 * dir;
   go(m1Speed, m2Speed, m3Speed);
   delay(3000);
 }
@@ -214,16 +214,15 @@ void loop(){
       case 27:  //Adress 3 Demofigures
         lcd.setCursor(0, 0);
         lcd.print("A:3");
-        switch(maerklin_fst_current.command)
-        {
+        switch(maerklin_fst_current.command) {
           case 80:  //Button * (Stop)
             go(0, 0, 0);
             break;
           case 81:  //Button 1 (Spin)
             spin(demoSpeed, dir);
-            break;-
+            break;
           case 82:  //Button 2 (Circle)
-            circle(demoSpeed, delayParam);
+            circle(demoSpeed, dir);
             break;
           case 83:  //Button 3 (Rectangle)
             rectangle(demoSpeed, delayParam);
