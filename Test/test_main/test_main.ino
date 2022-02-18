@@ -34,13 +34,13 @@ uint8_t       toggle,
 
 uint8_t omni_mode = 1;
 
-int8_t m1Speed = 0;
-int8_t m2Speed = 0;
-int8_t m3Speed = 0;
+int m1Speed = 0;
+int m2Speed = 0;
+int m3Speed = 0;
 
-int8_t demoSpeed = 50; //HIER BLEIBT ALLES SO WIE ES IST
+int demoSpeed = 50; //HIER BLEIBT ALLES SO WIE ES IST
 int delayParam = 3000;
-int8_t dir = 1;
+int dir = 1;
 
 
 
@@ -60,6 +60,7 @@ void spin(int demoSpeed, int dir){
   m3Speed = demoSpeed * dir;
   go(m1Speed, m2Speed, m3Speed);
   delay(2650);
+  go(0, 0, 0);
 }
 
 
@@ -69,6 +70,7 @@ void circle(int demoSpeed, int dir){
   m3Speed = demoSpeed * 0.675 * dir;
   go(m1Speed, m2Speed, m3Speed);
   delay(8250);
+  go(0, 0, 0);
 }
 
 
@@ -96,25 +98,62 @@ void rectangle(int demoSpeed, int delayParam, int dir){
   m3Speed = demoSpeed * -1 * dir;
   go(m1Speed, m2Speed, m3Speed);
   delay(delayParam);
+  go(0, 0, 0);
 }
 
 
-void triangle(int demoSpeed, int delayParam) {
-  m1Speed = demoSpeed * 0.79 * dir;
-  m2Speed = demoSpeed * 0.84 * dir;
-  m3Speed = demoSpeed * -1 * dir;
+void triangle(int demoSpeed, int delayParam, int dir) {
+  m1Speed = demoSpeed * 0.4 * dir;
+  m2Speed = demoSpeed * -1 * dir;
+  m3Speed = demoSpeed * 0.78 * dir;
   go(m1Speed, m2Speed, m3Speed);
   delay(delayParam);
+  m1Speed = demoSpeed * dir;
+  m2Speed = demoSpeed * dir;
+  m3Speed = demoSpeed * dir;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  m1Speed = demoSpeed * -0.4 * dir;
+  m2Speed = demoSpeed * dir;
+  m3Speed = demoSpeed * -0.78 * dir;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  m1Speed = demoSpeed * dir;
+  m2Speed = demoSpeed * dir;
+  m3Speed = demoSpeed * dir;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  m1Speed = demoSpeed * -0.79 * dir;
+  m2Speed = demoSpeed * -0.79 * dir;
+  m3Speed = demoSpeed * dir;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  m1Speed = demoSpeed * dir;
+  m2Speed = demoSpeed * dir;
+  m3Speed = demoSpeed * dir;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  go(0, 0, 0);  
 }
 
 
 void forward(int demoSpeed, int delayParam) {
-  
+  m1Speed = demoSpeed * -1;
+  m2Speed = demoSpeed;
+  m3Speed = 0;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  go(0, 0, 0);
 }
 
 
 void backward(int demoSpeed, int delayParam) {
-  
+  m1Speed = demoSpeed;
+  m2Speed = demoSpeed * -1;
+  m3Speed = 0;
+  go(m1Speed, m2Speed, m3Speed);
+  delay(delayParam);
+  go(0, 0, 0);
 }
 
 
@@ -123,7 +162,6 @@ void setup(){
   lcd.setCursor(0, 0);
   lcd.print("SIA 21/22 4Teck");
   delay(3000);
-  //graupner_fst_init(); //init Graupner Remote Control
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("A:    C:     M:A");
@@ -239,24 +277,24 @@ void loop(){
             lcd.print("C:84");
             lcd.setCursor(2, 1);
             lcd.print("Triangle ");
-            triangle(demoSpeed, delayParam);
+            triangle(demoSpeed, delayParam, dir);
             break;
           case 16:  //Button + (Forward)
             lcd.setCursor(6, 0);
             lcd.print("C:16");
-            lcd.setCursor(2, 1);
-            lcd.print("Forward  ");
+            lcd.setCursor(0, 1);
+            lcd.print("  Forward  ");
             forward(demoSpeed, delayParam);
             break;
           case 17:  //Button - (Backward)
             lcd.setCursor(6, 0);
             lcd.print("C:17");
-            lcd.setCursor(2, 1);
-            lcd.print("Backward  ");
+            lcd.setCursor(0, 1);
+            lcd.print("  Backward  ");
             backward(demoSpeed, delayParam);
             break;
           case 13: //Button <.> (R/L Toggle)
-            lcd.setCursor(6, 0);
+            /* lcd.setCursor(6, 0);
             lcd.print("C:18");
             if(dir = 1) {
               lcd.setCursor(0, 1);
@@ -267,12 +305,14 @@ void loop(){
               lcd.setCursor(0, 1);
               lcd.print("R");
               dir = 1;
-            }
+            } */
             break;
         }
       case 28:  //Adress 4 Drive
         lcd.setCursor(0, 0);
         lcd.print("A:4");
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
         switch(maerklin_fst_current.command){
           case 80: //Button *
   
@@ -327,16 +367,16 @@ void loop(){
     lcd.setCursor(8, 1);
     lcd.print(graupner_fst.channel(RC_MOTOR_4));
     
-    if(graupner_fst.channel(RC_MOTOR_3) > 1 or graupner_fst.channel(RC_MOTOR_3) < -1) {
-      m1Speed = graupner_fst.channel(RC_MOTOR_3) * -1;
-      m2Speed = graupner_fst.channel(RC_MOTOR_3);
+    if(graupner_fst.channel(RC_MOTOR_3) > 1 or graupner_fst.channel(RC_MOTOR_3) < 0) {
+      m1Speed = graupner_fst.channel(RC_MOTOR_3) * 1;
+      m2Speed = graupner_fst.channel(RC_MOTOR_3) * -1;
       m3Speed = 0;
       go(m1Speed, m2Speed, m3Speed);
     }
-    else if(graupner_fst.channel(RC_MOTOR_2) > 1 or graupner_fst.channel(RC_MOTOR_2) < -1) {
-      m1Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
-      m2Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
-      m3Speed = graupner_fst.channel(RC_MOTOR_2) * -1;
+    else if(graupner_fst.channel(RC_MOTOR_2) > 1 or graupner_fst.channel(RC_MOTOR_2) < 0) {
+      m1Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
+      m2Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
+      m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
       go(m1Speed, m2Speed, m3Speed);
     }
     else if(graupner_fst.channel(RC_MOTOR_4) > 1) {
