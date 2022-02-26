@@ -26,7 +26,7 @@ int m3Speed = 0;
 
 int demoSpeed = 40;
 int delayParam = 3000;
-//int dir = 1;
+int dir = 1;
 bool mode = false;
 
 
@@ -177,7 +177,7 @@ void loop(){
             break;
           case 81:  //Button 1 (Spin)
             spin(demoSpeed, dir);
-            break;-
+            break;
           case 82:  //Button 2 (Circle)
             circle(demoSpeed, delayParam);
             break;
