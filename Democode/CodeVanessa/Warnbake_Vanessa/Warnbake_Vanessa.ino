@@ -1,53 +1,3 @@
-/*
-case 83:   //Warnblinker - Symbol, Knopf 3
-          do{
-            pixels.clear();
-            pixels.setPixelColor(38, pixels.Color(5, 0, 0));   //Helles Warnblinker-Symbol
-            pixels.setPixelColor(30, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(22, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(14, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(6, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(29, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(21, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(13, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(20, pixels.Color(5, 0, 0));
-            pixels.show();
-  
-            pixels.setPixelColor(33, pixels.Color(5, 0, 0));   //Blink ding oben
-            pixels.setPixelColor(1, pixels.Color(5, 0, 0)); 
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(38, pixels.Color( 255, 0, 0)); //"Animiertes" Warnblinker-Symbol
-            pixels.setPixelColor(30, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(22, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(14, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(6, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(29, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(21, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(13, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(20, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL_2);
-          } while (83);
-            break; 
-
-*/
-
-
-
-
-
-
-
-
-
 #include <Rc5Decoder.h>
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -74,7 +24,9 @@ boolean blinker = true;
 boolean links = false;
 boolean rechts = false;
 boolean stopp = false;
-boolean sanduhr = true;
+boolean sanduhr = false;
+boolean einfahrtverbot = false;
+boolean ueberholverbot = true;
 
 unsigned colour_selection[8][3]=  {{0,0,0},{0,0,255},{0,255,0},{0,255,255},{255,0,0},{255,0,255},{255,255,0},{255,255,255}};
 
@@ -121,6 +73,7 @@ void loop() {
       pixels.setPixelColor(37, pixels.Color(6, 3, 0));
       pixels.setPixelColor(38, pixels.Color(6, 3, 0));
       pixels.show();
+      delay(DELAYVAL_2);
       
       pixels.setPixelColor(2, pixels.Color (60, 30, 0));
       pixels.show();
@@ -148,9 +101,6 @@ void loop() {
       pixels.setPixelColor(38, pixels.Color(60, 30, 0));
       pixels.show();
       delay(DELAYVAL_2);
-      
-      pixels.clear();
-      delay(DELAYVAL);
   }
   
 
@@ -166,6 +116,7 @@ void loop() {
       pixels.setPixelColor(14, pixels.Color(6, 3, 0));
       pixels.setPixelColor(6, pixels.Color(6, 3, 0));
       pixels.show();
+      delay(DELAYVAL_2);
 
       pixels.setPixelColor(34, pixels.Color (60, 30, 0));
       pixels.show();
@@ -193,9 +144,6 @@ void loop() {
       pixels.setPixelColor(6, pixels.Color(60, 30, 0));
       pixels.show();
       delay(DELAYVAL_2);
-      
-      pixels.clear();
-      delay(DELAYVAL);
   }
 
 
@@ -211,7 +159,7 @@ void loop() {
     pixels.setPixelColor(34, pixels.Color(6, 3, 0));
     pixels.setPixelColor(2, pixels.Color(6, 3, 0));
     pixels.show();
-    delay(DELAYVAL);
+    delay(DELAYVAL_2);
     
     pixels.setPixelColor(6, pixels.Color(60, 30, 0));
     pixels.setPixelColor(38, pixels.Color(60, 30, 0));
@@ -257,6 +205,7 @@ void loop() {
       pixels.setPixelColor(10, pixels.Color(6, 3, 0));
       pixels.setPixelColor(2, pixels.Color (6, 3, 0));
       pixels.show();
+      delay(DELAYVAL_2);
 
       pixels.setPixelColor(18, pixels.Color(60, 30, 0));
       pixels.show();
@@ -354,6 +303,118 @@ void loop() {
       pixels.show();
       delay(DELAYVAL_2);
   }
+
+  if(einfahrtverbot == true) {
+      pixels.clear();
+      pixels.setPixelColor(30, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(22, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(14, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(37, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(5, pixels.Color (5, 0, 0));
+      pixels.setPixelColor(36, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(4, pixels.Color (5, 0, 0));
+      pixels.setPixelColor(35, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(3, pixels.Color (5, 0, 0));
+      pixels.setPixelColor(26, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(18, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(10, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(13, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(21, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(29, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(27, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(19, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(11, pixels.Color(5, 0, 0));
+      pixels.setPixelColor(12, pixels.Color(5, 5, 5));
+      pixels.setPixelColor(28, pixels.Color(5, 5, 5));
+      pixels.setPixelColor(20, pixels.Color(5, 5, 5));
+      pixels.show();
+      delay(DELAYVAL_2);
+      
+      pixels.setPixelColor(14, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(22, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(30, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(5, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(13, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(21, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(29, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(37, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(4, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(12, pixels.Color(60, 60, 60));
+      pixels.setPixelColor(20, pixels.Color(60, 60, 60));
+      pixels.setPixelColor(28, pixels.Color(60, 60, 60));
+      pixels.setPixelColor(36, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(3, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(11, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(19, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(27, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(35, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(10, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(18, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(26, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL_2);
+  }
+
+
+  if(ueberholverbot == true) {
+      pixels.clear();
+      pixels.setPixelColor(30, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(14, pixels.Color(60, 60, 60));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(29, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+      
+      pixels.setPixelColor(28, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(30, pixels.Color(0, 0, 0));
+      pixels.setPixelColor(13, pixels.Color(60, 60, 60));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(27, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(29, pixels.Color(0, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.setPixelColor(26, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(28, pixels.Color(0, 0, 0));
+      pixels.setPixelColor(12, pixels.Color(60, 60, 60));
+      pixels.setPixelColor(14, pixels.Color(0, 0, 0));
+      pixels.show();
+      delay(DELAYVAL);
+
+      pixels.clear();
+      delay(DELAYVAL_2);
+
+      pixels.setPixelColor(38, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(29, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(20, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(11, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(2, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(34, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(27, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(13, pixels.Color(60, 0, 0));
+      pixels.setPixelColor(6, pixels.Color(60, 0, 0));
+      pixels.show();
+      delay(DELAYVAL_2);
+
+      pixels.clear();
+      delay(DELAYVAL_2);
+  }
   
   if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
       if(maerklin_fst_current.address == 24){
@@ -361,17 +422,18 @@ void loop() {
   
   
           case 80:   //Anschalten, Knopf *
-            pixels.setPixelColor(0, pixels.Color(255, 0 , 0));
-            pixels.show();
-            delay(500);
-            pixels.setPixelColor(0, pixels.Color(0, 0, 0));
-            pixels.show();
+            
             break;
   
   
           case 81:   //Links vorbei, Knopf 1
             if(links == false) {
               links = true;
+              rechts = false;
+              stopp = false;
+              sanduhr = false;
+              einfahrtverbot = false;
+              ueberholverbot = false;
             }
             else{
               links == false;
@@ -380,7 +442,12 @@ void loop() {
             
           case 82:   //STOPP, Knopf 2 
             if(stopp == false) {
+              links = false;
+              rechts = false;
               stopp = true;
+              sanduhr = false;
+              einfahrtverbot = false;
+              ueberholverbot = false;
             }
             else{
               stopp == false;
@@ -400,144 +467,62 @@ void loop() {
 
   
           case 84:   //Rechts vorbei, Knopf 4
-            if(blinker == false) {
-              blinker = true;
+            if(rechts == false) {
+              links = false;
+              rechts = true;
+              stopp = false;
+              sanduhr = false;
+              einfahrtverbot = false;
+              ueberholverbot = false;
             }
             else{
-              blinker == false;
+              rechts == false;
             }
             break;
              
   
           case 13:   //Sanduhr, Knopf <->
             if(sanduhr == false) {
+              links = false;
+              rechts = false;
+              stopp = false;
               sanduhr = true;
+              einfahrtverbot = false;
+              ueberholverbot = false;
             }
             else{
               sanduhr == false;
             }
             break;
 
+
           case 16:   //Einfahrt verboten, Knopf +
-          do {
-            pixels.clear();
-            pixels.setPixelColor(38, pixels.Color(5, 0, 0));   //Helles Einfahrt verboten-Symbol
-            pixels.setPixelColor(30, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(22, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(14, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(6, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(37, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(5, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(36, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(4, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(35, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(3, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(34, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(26, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(18, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(10, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(2, pixels.Color (5, 0, 0));
-            pixels.show();
-  
-            pixels.setPixelColor(33, pixels.Color(5, 0, 0));   //Blink ding oben
-            pixels.setPixelColor(1, pixels.Color(5, 0, 0)); 
-            pixels.show();
-            delay(DELAYVAL);
-            
-            pixels.setPixelColor(22, pixels.Color( 255, 0, 0));   //"Animiertes" Einfahr verboten-Symbol
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(14, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(30, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(38, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(6, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-  
-            pixels.setPixelColor(37, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(5, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-  
-            pixels.setPixelColor(36, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(4, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-  
-            pixels.setPixelColor(35, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(3, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-  
-            pixels.setPixelColor(34, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(2, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-  
-            pixels.setPixelColor(26, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(10, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-  
-            pixels.setPixelColor(18, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL_2);
-          } while (16);
+            if(einfahrtverbot == false) {
+              links = false;
+              rechts = false;
+              stopp = false;
+              sanduhr = false;
+              einfahrtverbot = true;
+              ueberholverbot = false;
+            }
+            else{
+              einfahrtverbot == false;
+            }
             break;
   
   
           case 17:   //Überholverboten, Knopf -
-          do{
-            pixels.clear(); 
-            pixels.setPixelColor(29, pixels.Color(5, 0, 0));//Helles Überholverboten-Symbol
-            pixels.setPixelColor(21, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(13, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(5, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(36, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(28, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(20, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(12, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(4, pixels.Color (5, 0, 0));
-            pixels.setPixelColor(35, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(27, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(19, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(11, pixels.Color(5, 0, 0));
-            pixels.setPixelColor(3, pixels.Color (5, 0, 0));
-            pixels.show();
-  
-            pixels.setPixelColor(33, pixels.Color(5, 0, 0));   //Blink ding oben
-            pixels.setPixelColor(1, pixels.Color(5, 0, 0)); 
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(19, pixels.Color( 255, 0, 0)); //"Animiertes" Überholverboten-Symbol
-            pixels.setPixelColor(20, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(21, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(11, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(12, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(13, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(27, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(28, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(29, pixels.Color( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL);
-    
-            pixels.setPixelColor(35, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(36, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(37, pixels.Color( 255, 0, 0));
-            pixels.setPixelColor(3, pixels.Color ( 255, 0, 0));
-            pixels.setPixelColor(4, pixels.Color ( 255, 0, 0));
-            pixels.setPixelColor(5, pixels.Color ( 255, 0, 0));
-            pixels.show();
-            delay(DELAYVAL_2);
-          } while (17);
+            if(ueberholverbot == false) {
+              links = false;
+              rechts = false;
+              stopp = false;
+              sanduhr = false;
+              einfahrtverbot = false;
+              ueberholverbot = true;
+            }
+            else{
+              ueberholverbot == false;
+            }
             break;
         }
       }
