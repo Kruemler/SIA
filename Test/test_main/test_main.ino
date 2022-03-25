@@ -34,11 +34,15 @@ uint8_t       toggle,
 
 uint8_t omni_mode = 1;
 
+bool staight = false;
+bool side = false;
+bool rotate = false;
+
 int m1Speed = 0;
 int m2Speed = 0;
 int m3Speed = 0;
 
-int demoSpeed = 50; //HIER BLEIBT ALLES SO WIE ES IST
+const int demoSpeed = 50; //konstanter Multiplikator (wird nicht verändert)
 int delayParam = 3000;
 int dir = 1;
 
@@ -154,6 +158,40 @@ void backward(int demoSpeed, int delayParam) {
   go(m1Speed, m2Speed, m3Speed);
   delay(delayParam);
   go(0, 0, 0);
+}
+
+void manualDrive(){ //No static signal between 0 - 5 --> no definition for this range
+    lcd.setCursor(0, 1);
+    lcd.print(graupner_fst.channel(RC_MOTOR_3));
+    lcd.setCursor(4, 1);
+    lcd.print(graupner_fst.channel(RC_MOTOR_2));
+    lcd.setCursor(8, 1);
+    lcd.print(graupner_fst.channel(RC_MOTOR_4));
+    
+    if(graupner_fst.channel(RC_MOTOR_3) < -1 or graupner_fst.channel(RC_MOTOR_3) > 1) {  //forward/ backward
+      m1Speed = graupner_fst.channel(RC_MOTOR_3) * 1;
+      m2Speed = graupner_fst.channel(RC_MOTOR_3) * 1;   //is supposed to be inverted (but it works only like that)
+      m3Speed = 0;
+      straight = true;
+    }
+    if(graupner_fst.channel(RC_MOTOR_2) < -1 or graupner_fst.channel(RC_MOTOR_2) > 1) { //sidewards
+      m1Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
+      m2Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
+      m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
+      side = true;
+    }
+    if(graupner_fst.channel(RC_MOTOR_4) > 1) { //rotate
+      m1Speed = graupner_fst.channel(RC_MOTOR_4);
+      m2Speed = graupner_fst.channel(RC_MOTOR_4);
+      m3Speed = graupner_fst.channel(RC_MOTOR_4);
+      rotate = true;
+    }
+    /*if(graupner_fst.channel(RC_MOTOR_4) < -1) {  //not function
+      m1Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
+      m2Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
+      m3Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
+    }*/
+    go(m1Speed, m2Speed, m3Speed);
 }
 
 
@@ -360,37 +398,7 @@ void loop(){
 
   //Manual Function
   if(omni_mode == OMNI_MODE_MANUAL) {
-    lcd.setCursor(0, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_3));
-    lcd.setCursor(4, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_2));
-    lcd.setCursor(8, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_4));
-    
-    if(graupner_fst.channel(RC_MOTOR_3) > 1 or graupner_fst.channel(RC_MOTOR_3) < 0) {
-      m1Speed = graupner_fst.channel(RC_MOTOR_3) * 1;
-      m2Speed = graupner_fst.channel(RC_MOTOR_3) * -1;
-      m3Speed = 0;
-      go(m1Speed, m2Speed, m3Speed);
-    }
-    else if(graupner_fst.channel(RC_MOTOR_2) > 1 or graupner_fst.channel(RC_MOTOR_2) < 0) {
-      m1Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
-      m2Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
-      m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
-      go(m1Speed, m2Speed, m3Speed);
-    }
-    else if(graupner_fst.channel(RC_MOTOR_4) > 1) {
-      m1Speed = graupner_fst.channel(RC_MOTOR_4);
-      m2Speed = graupner_fst.channel(RC_MOTOR_4);
-      m3Speed = graupner_fst.channel(RC_MOTOR_4);
-      go(m1Speed, m2Speed, m3Speed);
-    }
-    else if(graupner_fst.channel(RC_MOTOR_4) < -1) {
-      m1Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
-      m2Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
-      m3Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
-      go(m1Speed, m2Speed, m3Speed);
-    }
+    manualDrive();
   }
 
   delay(10);
