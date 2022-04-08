@@ -34,7 +34,7 @@ uint8_t       toggle,
 
 uint8_t omni_mode = 1;
 
-bool staight = false;
+bool straight = false;
 bool side = false;
 bool rotate = false;
 
@@ -175,16 +175,30 @@ void manualDrive(){ //No static signal between 0 - 5 --> no definition for this 
       straight = true;
     }
     if(graupner_fst.channel(RC_MOTOR_2) < -1 or graupner_fst.channel(RC_MOTOR_2) > 1) { //sidewards
-      m1Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
-      m2Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
-      m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
+      if(straight){
+        m1Speed = (m1Speed + (graupner_fst.channel(RC_MOTOR_2)*0.79))/2;  //Speed is already set in straight --> we just add the new speed and divide by 2
+        m2Speed = (m2Speed + (graupner_fst.channel(RC_MOTOR_2)*0.79))/2;
+        m3Speed = (m3Speed + (graupner_fst.channel(RC_MOTOR_2)*1.00))/2;
+      }
+      else{
+        m1Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
+        m2Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
+        m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
+      }
       side = true;
     }
-    if(graupner_fst.channel(RC_MOTOR_4) > 1) { //rotate
-      m1Speed = graupner_fst.channel(RC_MOTOR_4);
-      m2Speed = graupner_fst.channel(RC_MOTOR_4);
-      m3Speed = graupner_fst.channel(RC_MOTOR_4);
-      rotate = true;
+    if(graupner_fst.channel(RC_MOTOR_4) < -1 or graupner_fst.channel(RC_MOTOR_4) > 1) { //rotategraupner_fst.channel(RC_MOTOR_3)+
+      if(straight or side){
+        m1Speed = (m1Speed + graupner_fst.channel(RC_MOTOR_4))/2;
+        m2Speed = (m2Speed + graupner_fst.channel(RC_MOTOR_4))/2;
+        m3Speed = (m3Speed + graupner_fst.channel(RC_MOTOR_4))/2;
+      }
+      else{
+        m1Speed = graupner_fst.channel(RC_MOTOR_4);
+        m2Speed = graupner_fst.channel(RC_MOTOR_4);
+        m3Speed = graupner_fst.channel(RC_MOTOR_4);
+        rotate = true;
+      }
     }
     /*if(graupner_fst.channel(RC_MOTOR_4) < -1) {  //not function
       m1Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
@@ -192,6 +206,10 @@ void manualDrive(){ //No static signal between 0 - 5 --> no definition for this 
       m3Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
     }*/
     go(m1Speed, m2Speed, m3Speed);
+
+    straight = false;
+    side = false;
+    rotate = false;
 }
 
 
