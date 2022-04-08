@@ -160,7 +160,7 @@ void backward(int demoSpeed, int delayParam) {
   go(0, 0, 0);
 }
 
-void manualDrive(){ //No static signal between 0 - 5 --> no definition for this range
+void manualDrive(){ //No stable signal between 0 - 1 --> no definition for this range
     lcd.setCursor(0, 1);
     lcd.print(graupner_fst.channel(RC_MOTOR_3));
     lcd.setCursor(4, 1);
