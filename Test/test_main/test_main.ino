@@ -13,6 +13,10 @@
 #define RC_MOTOR_2  1
 #define RC_MOTOR_3  2
 #define RC_MOTOR_4  3
+#define RC_MOTOR_5  4
+#define RC_MOTOR_6  5
+#define RC_MOTOR_7  6
+#define RC_MOTOR_8  7
 
 #define OMNI_MODE_STOP    0
 #define OMNI_MODE_AUTO    1
@@ -37,6 +41,7 @@ uint8_t omni_mode = 1;
 bool straight = false;
 bool side = false;
 bool rotate = false;
+bool invert = false;
 
 int m1Speed = 0;
 int m2Speed = 0;
@@ -161,55 +166,75 @@ void backward(int demoSpeed, int delayParam) {
 }
 
 void manualDrive(){ //No stable signal between 0 - 1 --> no definition for this range
-    lcd.setCursor(0, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_3));
-    lcd.setCursor(4, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_2));
-    lcd.setCursor(8, 1);
-    lcd.print(graupner_fst.channel(RC_MOTOR_4));
-    
-    if(graupner_fst.channel(RC_MOTOR_3) < -1 or graupner_fst.channel(RC_MOTOR_3) > 1) {  //forward/ backward
-      m1Speed = graupner_fst.channel(RC_MOTOR_3) * 1;
-      m2Speed = graupner_fst.channel(RC_MOTOR_3) * 1;   //is supposed to be inverted (but it works only like that)
+  switch(graupner_fst.channel(RC_MOTOR_8)){
+    case 100: //manualDrive Omni
+      lcd.setCursor(0, 1);
+      lcd.print(graupner_fst.channel(RC_MOTOR_3));
+      lcd.setCursor(4, 1);
+      lcd.print(graupner_fst.channel(RC_MOTOR_2));
+      lcd.setCursor(8, 1);
+      lcd.print(graupner_fst.channel(RC_MOTOR_4));
+      
+      if(graupner_fst.channel(RC_MOTOR_3) < -1 or graupner_fst.channel(RC_MOTOR_3) > 1) {  //forward/ backward
+        m1Speed = graupner_fst.channel(RC_MOTOR_3) * 1;
+        m2Speed = graupner_fst.channel(RC_MOTOR_3) * 1;   //is supposed to be inverted (but it works only like that)
+        m3Speed = 0;
+      }
+      if(graupner_fst.channel(RC_MOTOR_2) < -1 or graupner_fst.channel(RC_MOTOR_2) > 1) { //sidewards
+        if(straight){
+          m1Speed = (m1Speed + (graupner_fst.channel(RC_MOTOR_2)*0.79))/2;  //Speed is already set in straight --> we just add the new speed and divide by 2
+          m2Speed = (m2Speed + (graupner_fst.channel(RC_MOTOR_2)*0.79))/2;
+          m3Speed = (m3Speed + (graupner_fst.channel(RC_MOTOR_2)*1.00))/2;
+        }
+        else{
+          m1Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
+          m2Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
+          m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
+        }
+      }
+      if(graupner_fst.channel(RC_MOTOR_4) < -1 or graupner_fst.channel(RC_MOTOR_4) > 1) { //rotategraupner_fst.channel(RC_MOTOR_3)+
+        if(straight or side){
+          m1Speed = (m1Speed + graupner_fst.channel(RC_MOTOR_4))/2;
+          m2Speed = (m2Speed + graupner_fst.channel(RC_MOTOR_4))/2;
+          m3Speed = (m3Speed + graupner_fst.channel(RC_MOTOR_4))/2;
+        }
+        else{
+          m1Speed = graupner_fst.channel(RC_MOTOR_4);
+          m2Speed = graupner_fst.channel(RC_MOTOR_4);
+          m3Speed = graupner_fst.channel(RC_MOTOR_4);
+        }
+      }
+      /*if(graupner_fst.channel(RC_MOTOR_4) < -1) {  //not function
+        m1Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
+        m2Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
+        m3Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
+      }*/
+      go(-1*m1Speed, -1*m2Speed, -1*m3Speed);
+      break;
+    case 0: //Arexx-Drive
       m3Speed = 0;
-      straight = true;
-    }
-    if(graupner_fst.channel(RC_MOTOR_2) < -1 or graupner_fst.channel(RC_MOTOR_2) > 1) { //sidewards
-      if(straight){
-        m1Speed = (m1Speed + (graupner_fst.channel(RC_MOTOR_2)*0.79))/2;  //Speed is already set in straight --> we just add the new speed and divide by 2
-        m2Speed = (m2Speed + (graupner_fst.channel(RC_MOTOR_2)*0.79))/2;
-        m3Speed = (m3Speed + (graupner_fst.channel(RC_MOTOR_2)*1.00))/2;
-      }
-      else{
-        m1Speed = graupner_fst.channel(RC_MOTOR_2) * -0.79;
-        m2Speed = graupner_fst.channel(RC_MOTOR_2) * 0.79;
-        m3Speed = graupner_fst.channel(RC_MOTOR_2) * 1;
-      }
-      side = true;
-    }
-    if(graupner_fst.channel(RC_MOTOR_4) < -1 or graupner_fst.channel(RC_MOTOR_4) > 1) { //rotategraupner_fst.channel(RC_MOTOR_3)+
-      if(straight or side){
-        m1Speed = (m1Speed + graupner_fst.channel(RC_MOTOR_4))/2;
-        m2Speed = (m2Speed + graupner_fst.channel(RC_MOTOR_4))/2;
-        m3Speed = (m3Speed + graupner_fst.channel(RC_MOTOR_4))/2;
-      }
-      else{
-        m1Speed = graupner_fst.channel(RC_MOTOR_4);
-        m2Speed = graupner_fst.channel(RC_MOTOR_4);
-        m3Speed = graupner_fst.channel(RC_MOTOR_4);
-        rotate = true;
-      }
-    }
-    /*if(graupner_fst.channel(RC_MOTOR_4) < -1) {  //not function
-      m1Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
-      m2Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
-      m3Speed = graupner_fst.channel(RC_MOTOR_4) * -1;
-    }*/
-    go(m1Speed, m2Speed, m3Speed);
+        if(graupner_fst.channel(RC_MOTOR_3) < -1 or graupner_fst.channel(RC_MOTOR_3) > 1) {  //forward/ backward
+          if(graupner_fst.channel(RC_MOTOR_3) > 0){
+          }
+          m1Speed = graupner_fst.channel(RC_MOTOR_3) * 0.7;
+          m2Speed = graupner_fst.channel(RC_MOTOR_3) * 0.7;
+        }
+        if(graupner_fst.channel(RC_MOTOR_2) < -1 or graupner_fst.channel(RC_MOTOR_2) > 1) {   //sidewards
+          if (graupner_fst.channel(RC_MOTOR_2) > 0){
+            m1Speed = m1Speed + graupner_fst.channel(RC_MOTOR_2) * 0.5;
+            
+          }
+          if (graupner_fst.channel(RC_MOTOR_2) < 0){
+            m2Speed = m1Speed + graupner_fst.channel(RC_MOTOR_2) * -0.5;
+          }
+        }
+      m3Speed = 0;
+      go(-m1Speed, -m2Speed, m3Speed);
 
-    straight = false;
-    side = false;
-    rotate = false;
+      break;
+    case -100: //Driften
+      break;
+  }
 }
 
 
