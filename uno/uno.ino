@@ -1,5 +1,7 @@
-#include <Rc5Decoder.h>
+#include <rc5_decoder_uno.h>
 #include <Adafruit_NeoPixel.h>
+
+
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
@@ -8,7 +10,7 @@ struct STRUCT_RC5 {
 uint8_t       toggle, 
               address, 
               command;
-}maerklin_fst_current, maerklin_fst_previous;
+}maerklin_fst_current, maerklin_fst_previous; 
 
 
 #define PIN 13 
@@ -20,13 +22,13 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 #define DELAYVAL 150
 #define DELAYVAL_2 500
-boolean blinker = true;
+boolean blinker = false;
 boolean links = false;
 boolean rechts = false;
 boolean stopp = false;
 boolean sanduhr = false;
 boolean einfahrtverbot = false;
-boolean ueberholverbot = true;
+boolean ueberholverbot = false;
 
 unsigned colour_selection[8][3]=  {{0,0,0},{0,0,255},{0,255,0},{0,255,255},{255,0,0},{255,0,255},{255,255,0},{255,255,255}};
 
@@ -35,12 +37,11 @@ void setup() {
    pixels.begin();
    pixels.clear();
    Serial.begin(9600);
+   rc5_init_uno(); //init Maerklin remote control
 }
 
 void loop() {
-
-
-  
+ 
   if(blinker == true) {
       pixels.setPixelColor(32, pixels.Color(60, 30, 0));
       pixels.setPixelColor(0, pixels.Color(60, 30, 0)); 
@@ -59,8 +60,9 @@ void loop() {
       pixels.show();
       delay(DELAYVAL_2);
   }
-  
 
+  rc5_nano();  
+ 
   if(links == true) {
       pixels.clear();
       pixels.setPixelColor(2, pixels.Color (6, 3, 0));
@@ -102,7 +104,8 @@ void loop() {
       pixels.show();
       delay(DELAYVAL_2);
   }
-  
+
+  rc5_nano();  
 
   if(rechts == true) {
       pixels.clear(); 
@@ -146,6 +149,7 @@ void loop() {
       delay(DELAYVAL_2);
   }
 
+  rc5_nano();
 
   if(stopp == true) {
     pixels.clear();
@@ -186,6 +190,7 @@ void loop() {
     delay(DELAYVAL_2);
   }
 
+  rc5_nano();
 
   if(sanduhr == true){
       pixels.clear();
@@ -304,6 +309,8 @@ void loop() {
       delay(DELAYVAL_2);
   }
 
+  rc5_nano();
+  
   if(einfahrtverbot == true) {
       pixels.clear();
       pixels.setPixelColor(30, pixels.Color(5, 0, 0));
@@ -367,6 +374,7 @@ void loop() {
       delay(DELAYVAL_2);
   }
 
+  rc5_nano();
 
   if(ueberholverbot == true) {
       pixels.clear();
@@ -415,14 +423,20 @@ void loop() {
       pixels.clear();
       delay(DELAYVAL_2);
   }
-  
-  if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){
+
+  rc5_nano();
+}
+
+void rc5_nano(void){
+
+  rc5_read_uno(&maerklin_fst_current.toggle,&maerklin_fst_current.address,&maerklin_fst_current.command);
+  if(maerklin_fst_previous.toggle != maerklin_fst_current.toggle){    
       if(maerklin_fst_current.address == 24){
         switch(maerklin_fst_current.command){
   
   
           case 80:   //Anschalten, Knopf *
-            
+            //Anschalten hinzufügen     
             break;
   
   
@@ -436,7 +450,9 @@ void loop() {
               ueberholverbot = false;
             }
             else{
-              links == false;
+              links = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
             
@@ -450,7 +466,9 @@ void loop() {
               ueberholverbot = false;
             }
             else{
-              stopp == false;
+              stopp = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
 
@@ -460,7 +478,9 @@ void loop() {
               blinker = true;
             }
             else{
-              blinker == false;
+              blinker = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
 
@@ -476,7 +496,9 @@ void loop() {
               ueberholverbot = false;
             }
             else{
-              rechts == false;
+              rechts = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
              
@@ -491,7 +513,9 @@ void loop() {
               ueberholverbot = false;
             }
             else{
-              sanduhr == false;
+              sanduhr = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
 
@@ -506,7 +530,9 @@ void loop() {
               ueberholverbot = false;
             }
             else{
-              einfahrtverbot == false;
+              einfahrtverbot = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
   
@@ -521,10 +547,13 @@ void loop() {
               ueberholverbot = true;
             }
             else{
-              ueberholverbot == false;
+              ueberholverbot = false;
+              pixels.clear();
+              pixels.show();
             }
             break;
         }
       }
     }
+    maerklin_fst_previous = maerklin_fst_current;
 }
